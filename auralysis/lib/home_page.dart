@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
+import 'api_service.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -77,6 +79,28 @@ class _HomePageState extends State<HomePage> {
           _resultData = jsonDecode(responseBody);
           _isLoading = false;
         });
+        
+        // Log to history
+        try {
+          final token = await ApiService.getToken();
+          if (token != null) {
+            await http.post(
+              Uri.parse('${ApiService.baseUrl}/history'),
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer $token',
+              },
+              body: jsonEncode({
+                'disease': _resultData!['prediction'],
+                'confidence': _resultData!['confidence'],
+                'report_summary': jsonEncode(_resultData!['medical_report']),
+                'voice_url': _resultData!['voice_report_url']
+              }),
+            );
+          }
+        } catch (e) {
+          debugPrint('Failed to save history: $e');
+        }
       } else {
         throw Exception("Server Error");
       }
@@ -408,8 +432,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildReportSection(String title, dynamic content, IconData icon) {
-    if (content == null || content.toString().isEmpty)
+    if (content == null || content.toString().isEmpty) {
       return const SizedBox.shrink();
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 25),
       child: Column(

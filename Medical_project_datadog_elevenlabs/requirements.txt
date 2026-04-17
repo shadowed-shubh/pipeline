@@ -9,3 +9,6 @@ google-api-core
 google-auth
 python-multipart==0.0.7
 setuptools
+sqlalchemy
+PyJWT
+passlib[bcrypt]

@@ -11,8 +11,27 @@ from elevenlabs import generate, set_api_key   # 🟢 legacy SDK - works on Rail
 # ----------------------------------------
 # Load Environment Variables
 # ----------------------------------------
+from dotenv import load_dotenv
+import google.generativeai as genai
+from elevenlabs import generate, set_api_key   # 🟢 legacy SDK - works on Railway
+from fastapi.middleware.cors import CORSMiddleware
+from routers import router as api_router
+
+# ----------------------------------------
+# Load Environment Variables
+# ----------------------------------------
 load_dotenv()
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(api_router)
 
 # API KEYS
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -203,7 +222,7 @@ async def diagnose(file: UploadFile = File(...)):
 
         report = generate_llm_report(prediction, confidence)
         summary = gemini_summary(report)
-        generate_voice(report)
+        voice_generated = generate_voice(report)
 
         dd_metric("latency", (time.time() - start) * 1000, "gauge")
 
@@ -212,7 +231,7 @@ async def diagnose(file: UploadFile = File(...)):
             "confidence": confidence,
             "medical_report": report,
             "patient_summary": summary,
-            "voice_report_url": "/voice-report"
+            "voice_report_url": "/voice-report" if voice_generated else None
         }
 
     except Exception as e:
