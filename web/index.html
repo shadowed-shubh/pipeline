@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auralysis | Professional AI Healthcare Platform</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+    <div id="app">
+        
+        <!-- 1. AUTHENTICATION SECTION (Signup/Login) -->
+        <section id="auth-section">
+            <div class="auth-wrapper">
+                <div class="auth-container">
+                    <div class="auth-brand" style="margin-bottom: 2rem; text-align: left;">
+                        <h1 data-t="brandName" style="color: var(--primary); font-size: 2rem; margin-bottom: 0.25rem;">Auralysis</h1>
+                        <p data-t="brandTagline" style="color: var(--text-sec); font-size: 0.95rem;">Professional AI Medical Platform</p>
+                    </div>
+                    
+                    <div class="auth-card" style="padding: 2.5rem; text-align: left;">
+                        <h2 class="auth-title" id="auth-title" data-t="titleSignIn" style="text-align: left; margin-bottom: 1.5rem; font-size: 1.5rem;">Sign In</h2>
+
+                        <!-- Role Selector -->
+                        <div class="role-selector" style="margin-bottom: 2rem;">
+                            <button id="role-patient" class="active" onclick="switchRole('patient')" data-t="rolePatient">Patient</button>
+                            <button id="role-doctor" onclick="switchRole('doctor')" data-t="roleDoctor">Doctor</button>
+                        </div>
+
+                        <!-- LOGIN FORM -->
+                        <form id="login-form" onsubmit="handleAuth(event, 'login')">
+                            <div class="form-group fuller" style="margin-bottom: 1.25rem;">
+                                <label data-t="lblEmail">Email Address</label>
+                                <input type="email" placeholder="email@example.com" required>
+                            </div>
+                            <div class="form-group fuller" style="margin-bottom: 1.5rem;">
+                                <label data-t="lblPassword">Password</label>
+                                <input type="password" id="login-pass" placeholder="••••••••" required>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary full-width auth-submit-btn" data-t="btnLogin" style="margin-bottom: 1rem;">Sign In</button>
+                        </form>
+
+                        <!-- PATIENT SIGNUP -->
+                        <form id="patient-signup-form" class="hidden" onsubmit="handleAuth(event, 'signup-patient')">
+                            <div class="form-grid">
+                                <div class="form-group fuller">
+                                    <label data-t="lblFullName">Full Name</label>
+                                    <input type="text" placeholder="John Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblGender">Gender</label>
+                                    <select required>
+                                        <option value="male" data-t="optMale">Male</option>
+                                        <option value="female" data-t="optFemale">Female</option>
+                                        <option value="other" data-t="optOther">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblAge">Age</label>
+                                    <input type="number" placeholder="25" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblEmail">Email</label>
+                                    <input type="email" placeholder="john@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblMobile">Mobile</label>
+                                    <input type="tel" placeholder="+1 234 567 890" required>
+                                </div>
+                                <div class="form-group fuller">
+                                    <label data-t="lblLanguage">Preferred Language</label>
+                                    <select id="signup-lang" onchange="changeLanguage(this.value)">
+                                        <option value="en">English (US)</option>
+                                        <option value="hi">Hindi (हिंदी)</option>
+                                        <option value="mr">Marathi (मराठी)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group fuller">
+                                    <label data-t="lblPassword">Password</label>
+                                    <input type="password" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary full-width auth-submit-btn" data-t="btnCreateAccount" style="margin-bottom: 1rem;">Create Patient Account</button>
+                        </form>
+
+                        <!-- DOCTOR SIGNUP -->
+                        <form id="doctor-signup-form" class="hidden" onsubmit="handleAuth(event, 'signup-doctor')">
+                            <div class="form-grid">
+                                <div class="form-group fuller">
+                                    <label data-t="lblDoctorName">Doctor Name</label>
+                                    <input type="text" placeholder="Dr. Sarah Mitchell" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblQualification">Qualification</label>
+                                    <input type="text" placeholder="MD, MBBS" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblSpecialization">Specialization</label>
+                                    <input type="text" placeholder="Cardiology" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblEmail">Email</label>
+                                    <input type="email" placeholder="clinic@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblPhone">Phone</label>
+                                    <input type="tel" placeholder="+1 987 654 321" required>
+                                </div>
+                                <div class="form-group fuller">
+                                    <label data-t="lblExperience">Experience (Years)</label>
+                                    <input type="number" placeholder="10" required>
+                                </div>
+                                <div class="form-group fuller">
+                                    <label data-t="lblPassword">Password</label>
+                                    <input type="password" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary full-width auth-submit-btn" data-t="btnRegisterDoctor" style="margin-bottom: 1rem;">Register as Doctor</button>
+                        </form>
+
+                        <div style="margin-top: 1rem; text-align: left;">
+                            <p id="auth-footer-text" style="margin: 0; color: var(--text-sec); font-size: 0.95rem;">
+                                Don't have an account? <a href="#" onclick="toggleAuthMode('signup')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign up</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MAIN APP LAYOUT -->
+        <div id="main-layout" class="hidden">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div class="sidebar-logo">
+                    <i data-lucide="activity"></i>
+                    <span data-t="brandName">Auralysis</span>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <!-- PATIENT NAV -->
+                    <div id="nav-patient">
+                        <a href="#" class="active" onclick="showPage('patient-dash')" data-t="navHome"><i data-lucide="home"></i> Dashboard</a>
+                        <a href="#" onclick="showPage('patient-reports')" data-t="navReports"><i data-lucide="file-text"></i> My Reports</a>
+                        <a href="#" onclick="showPage('upload-report')" data-t="navUpload"><i data-lucide="plus-circle"></i> Upload New</a>
+                        <a href="#" onclick="showPage('settings-page')" data-t="navSettings"><i data-lucide="settings"></i> Settings</a>
+                    </div>
+                    <!-- DOCTOR NAV -->
+                    <div id="nav-doctor" class="hidden">
+                        <a href="#" class="active" onclick="showPage('doctor-dash')" data-t="navOverview"><i data-lucide="grid"></i> Overview</a>
+                        <a href="#" onclick="showPage('patient-list')" data-t="navPatients"><i data-lucide="users"></i> Patient Cases</a>
+                        <a href="#" onclick="showPage('clinical-analytics')" data-t="navAnalytics"><i data-lucide="trending-up"></i> Analytics</a>
+                        <a href="#" onclick="showPage('settings-page')" data-t="navSettings"><i data-lucide="settings"></i> Settings</a>
+                    </div>
+                </nav>
+
+                <div class="sidebar-user">
+                    <img src="https://ui-avatars.com/api/?name=User&background=eff6ff&color=3b82f6" alt="Avatar" id="user-avatar">
+                    <div class="user-info">
+                        <p class="user-name" id="display-name">Guest</p>
+                        <p class="user-role" id="display-role">Patient</p>
+                    </div>
+                    <div class="notification-trigger" onclick="toggleNotifications()" style="margin-right: 0.5rem; color: var(--text-sec); cursor: pointer; position: relative;">
+                        <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                        <span class="pulse-dot" style="top: -2px; right: -2px; width: 8px; height: 8px;"></span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()" style="background: none; border: none; color: var(--text-sec); cursor: pointer; display: flex; align-items: center;"><i data-lucide="log-out" style="width: 20px; height: 20px;"></i></button>
+                </div>
+            </aside>
+
+            <!-- CONTENT AREA -->
+            <main class="content">
+
+                <div class="page-container" style="padding-top: 3rem;">
+                    
+                    <!-- PATIENT DASHBOARD -->
+                    <section id="patient-dash-view" class="page-view">
+                        <div class="welcome-section">
+                            <h1 data-t="hWelcomePatient">Your medical reports are ready for review.</h1>
+                            <p data-t="pWelcomePatient">Welcome back. Your health insights are processed by LLaMA and Gemini.</p>
+                        </div>
+
+                        <div class="stat-grid">
+                            <div class="glass-card stat-item">
+                                <div class="stat-header">
+                                    <div class="icon-box blue"><i data-lucide="file-text"></i></div>
+                                    <span class="label" data-t="lblReports">Reports</span>
+                                </div>
+                                <div class="stat-value">12</div>
+                                <div class="stat-desc" data-t="pTotalReports">Total reports uploaded</div>
+                            </div>
+                            <div class="glass-card stat-item">
+                                <div class="stat-header">
+                                    <div class="icon-box green"><i data-lucide="check-circle"></i></div>
+                                    <span class="label" data-t="lblStatus">Status</span>
+                                </div>
+                                <div class="stat-value" data-t="valNormal">Normal</div>
+                                <div class="stat-desc" data-t="pLatestDiagnosis">Latest clinical diagnosis</div>
+                            </div>
+                            <div class="glass-card stat-item">
+                                <div class="stat-header">
+                                    <div class="icon-box purple"><i data-lucide="shield"></i></div>
+                                    <span class="label" data-t="lblConfidence">Confidence</span>
+                                </div>
+                                <div class="stat-value">99.2%</div>
+                                <div class="stat-desc" data-t="pAIReliability">AI Model reliability score</div>
+                            </div>
+                        </div>
+
+                        <div class="main-card-grid">
+                            <div class="glass-card list-card">
+                                <div class="card-title-row">
+                                    <h3 data-t="hRecentReports">Recent Clinical Reports</h3>
+                                    <button class="btn-text" data-t="btnViewAll">View All</button>
+                                </div>
+                                <div class="report-list">
+                                    <div class="report-item" onclick="viewResult('chest')">
+                                        <div class="item-icon"><i data-lucide="image"></i></div>
+                                        <div class="item-meta">
+                                            <p class="item-name">Chest X-Ray</p>
+                                            <p class="item-sub">Oct 17, 2023 • City Diagnostics</p>
+                                        </div>
+                                        <div class="item-badges">
+                                            <span class="badge success">Normal</span>
+                                            <i data-lucide="chevron-right" class="arrow"></i>
+                                        </div>
+                                    </div>
+                                    <div class="report-item" onclick="viewResult('blood')">
+                                        <div class="item-icon"><i data-lucide="file-text"></i></div>
+                                        <div class="item-meta">
+                                            <p class="item-name">Blood Report</p>
+                                            <p class="item-sub">Sep 28, 2023 • LabCorp</p>
+                                        </div>
+                                        <div class="item-badges">
+                                            <span class="badge warning">Review Needed</span>
+                                            <i data-lucide="chevron-right" class="arrow"></i>
+                                        </div>
+                                    </div>
+                                    <div class="report-item" onclick="viewResult('mri')">
+                                        <div class="item-icon"><i data-lucide="activity"></i></div>
+                                        <div class="item-meta">
+                                            <p class="item-name">MRI Scan</p>
+                                            <p class="item-sub">Sep 15, 2023 • Imaging Center</p>
+                                        </div>
+                                        <div class="item-badges">
+                                            <span class="badge" style="background: var(--primary-light); color: var(--primary);">Completed</span>
+                                            <i data-lucide="chevron-right" class="arrow"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card cta-card upload-cta" onclick="showPage('upload-report')">
+                                <div class="cta-icon"><i data-lucide="upload-cloud"></i></div>
+                                <h3 data-t="hUploadReport">Analyze New Report</h3>
+                                <p data-t="pUploadCta">Instant AI interpretation for images and PDFs.</p>
+                                <button class="btn-primary" data-t="btnStartUpload">Start Upload</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- DOCTOR DASHBOARD -->
+                    <section id="doctor-dash-view" class="page-view hidden">
+                        <div class="welcome-section">
+                            <h1 data-t="hClinicalReview">Clinical Review Hub</h1>
+                            <p data-t="pDoctorWelcome">Monitoring patient cases and AI suggestions.</p>
+                        </div>
+                        
+                        <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="glass-card stat-item">
+                                <p class="label">Total Patients</p>
+                                <div class="stat-value">124</div>
+                            </div>
+                            <div class="glass-card stat-item">
+                                <p class="label">Reports Analyzed</p>
+                                <div class="stat-value">342</div>
+                            </div>
+                            <div class="glass-card stat-item">
+                                <p class="label" style="color: var(--error);">Critical Cases</p>
+                                <div class="stat-value text-red" style="color: var(--error);">12</div>
+                            </div>
+                            <div class="glass-card stat-item">
+                                <p class="label">AI Accuracy</p>
+                                <div class="stat-value text-green" style="color: var(--success);">96.4%</div>
+                            </div>
+                        </div>
+
+                        <!-- SIMPLE CHARTS -->
+                        <div class="charts-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+                            <div class="glass-card">
+                                <h4 style="font-size: 0.95rem; color: var(--text-sec); margin-bottom: 1rem; font-family: 'Inter', sans-serif;">Reports Per Day</h4>
+                                <div style="display: flex; align-items: flex-end; gap: 8px; height: 100px;">
+                                    <div style="flex: 1; background: var(--primary-light); height: 40%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--primary); height: 70%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--primary-light); height: 50%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--primary); height: 90%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--primary-light); height: 60%; border-radius: 4px 4px 0 0;"></div>
+                                </div>
+                            </div>
+                            <div class="glass-card">
+                                <h4 style="font-size: 0.95rem; color: var(--text-sec); margin-bottom: 1rem; font-family: 'Inter', sans-serif;">Disease Distribution</h4>
+                                <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 100%; background: #f1f5f9; height: 8px; border-radius: 4px;"><div style="width: 60%; background: var(--primary); height: 100%; border-radius: 4px;"></div></div><span style="font-size: 0.8rem; font-weight: 500; min-width: 70px;">Pneumonia</span></div>
+                                    <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 100%; background: #f1f5f9; height: 8px; border-radius: 4px;"><div style="width: 30%; background: var(--warning); height: 100%; border-radius: 4px;"></div></div><span style="font-size: 0.8rem; font-weight: 500; min-width: 70px;">Fracture</span></div>
+                                    <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 100%; background: #f1f5f9; height: 8px; border-radius: 4px;"><div style="width: 10%; background: var(--success); height: 100%; border-radius: 4px;"></div></div><span style="font-size: 0.8rem; font-weight: 500; min-width: 70px;">Normal</span></div>
+                                </div>
+                            </div>
+                            <div class="glass-card">
+                                <h4 style="font-size: 0.95rem; color: var(--text-sec); margin-bottom: 1rem; font-family: 'Inter', sans-serif;">Alert Frequency</h4>
+                                <div style="display: flex; align-items: flex-end; gap: 8px; height: 100px;">
+                                    <div style="flex: 1; background: var(--error-light); height: 20%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--error-light); height: 30%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--error); height: 80%; border-radius: 4px 4px 0 0;"></div>
+                                    <div style="flex: 1; background: var(--error-light); height: 40%; border-radius: 4px 4px 0 0;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doctor-panels">
+                            <div class="glass-card case-panel">
+                                <div class="card-title-row">
+                                    <h3 data-t="hPriorityCases">Priority Patient Cases</h3>
+                                    <i data-lucide="filter" class="icon-small"></i>
+                                </div>
+                                <div class="patient-cases">
+                                    <!-- CRITICAL PRIORITY -->
+                                    <div class="patient-case critical" style="display: flex; flex-direction: column; gap: 1rem; padding: 1.2rem; align-items: flex-start; cursor: default;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
+                                            <img src="https://ui-avatars.com/api/?name=JD&background=fee2e2&color=ef4444" alt="JD">
+                                            <div class="case-info" style="flex: 1;">
+                                                <p class="case-name">John Doe (Age 45) <span class="case-tag tag-red" data-t="tagCritical">Critical</span></p>
+                                                <p class="case-diag" style="color: var(--error); font-weight: 700;">Disease Detected: Pneumonia</p>
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <div style="font-size: 0.8rem; color: var(--text-muted);">Confidence Score</div>
+                                                <div style="font-weight: 700; color: var(--text-main);">92.4%</div>
+                                            </div>
+                                        </div>
+                                        <div style="background: rgba(239, 68, 68, 0.05); border-left: 3px solid var(--error); padding: 0.75rem; font-size: 0.85rem; border-radius: 4px; width: 100%;">
+                                            <strong>AI Explanation:</strong> Opacity detected in lower right lung region strongly indicative of localized infection.
+                                        </div>
+                                        <button class="btn-primary full-width" style="height: 40px; font-size: 0.9rem;" onclick="handleDoctorReview('John Doe')"><i data-lucide="activity"></i> Analyze Report</button>
+                                    </div>
+
+                                    <!-- NORMAL CASE -->
+                                    <div class="patient-case" style="display: flex; align-items: center; padding: 1rem;">
+                                        <img src="https://ui-avatars.com/api/?name=AS&background=f0f9ff&color=3b82f6" alt="AS">
+                                        <div class="case-info" style="flex: 1;">
+                                            <p class="case-name">Alice Smith (Age 29) <span class="case-tag" data-t="tagNormal">Normal</span></p>
+                                            <p class="case-diag">Routine MRI Screening</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">Confidence</div>
+                                            <div style="font-weight: 700; color: var(--success);">98.1%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card analytics-preview">
+                                <h3 data-t="hAIInsights">AI Clinical Insights</h3>
+                                <div class="insight-box">
+                                    <div class="box-icon"><i data-lucide="zap"></i></div>
+                                    <p data-t="pAISuggestion">Trends suggest localized infection in Case #942 based on multi-parameter analysis. Requesting manual follow-up.</p>
+                                </div>
+                                <button class="btn-outline full-width" data-t="btnViewFullAnalytics">View Full Analytics</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- UPLOAD SECTION -->
+                    <section id="upload-report-view" class="page-view hidden">
+                        <div class="upload-container">
+                            <h1 data-t="hUploadHeader">Upload Medical Document</h1>
+                            <p class="subtitle" data-t="pUploadSubtitle">Upload MRI, X-Ray images or digital reports for instant AI interpretation.</p>
+                            
+                            <div id="upload-step-1">
+                                <div class="glass-card dropzone" style="max-width: 600px; margin: 0 auto; margin-bottom: 2rem;">
+                                    <i data-lucide="cloud-upload" class="big-icon"></i>
+                                    <h2 data-t="hDropzoneTitle">Drag & Drop or Click to Upload</h2>
+                                    <p data-t="pDropzoneDesc">Supports JPG, PNG, PDF (Max 25MB)</p>
+                                    <input type="file" id="file-input" class="hidden" onchange="fileSelected()">
+                                    <button class="btn-outline" onclick="document.getElementById('file-input').click()" style="margin-bottom: 1rem;">Choose File</button>
+                                    <div id="file-name-display" style="color: var(--primary); font-weight: 600; font-size: 0.95rem;"></div>
+                                </div>
+                                <button class="btn-primary" id="btn-analyze" onclick="triggerFileUpload()" disabled style="opacity: 0.5; transition: opacity 0.3s;">Analyze Report</button>
+                            </div>
+
+                            <div id="uploading-state" class="hidden">
+                                <div class="loader-wrap">
+                                    <div class="loader-spinner"></div>
+                                    <div class="loader-text" id="loading-text" data-t="pAnalyzing">Uploading report...</div>
+                                </div>
+                                <div class="progress-bar" style="max-width: 600px; margin: 0 auto;">
+                                    <div class="progress-fill" id="upload-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- RESULT PAGE -->
+                    <section id="result-view" class="page-view hidden">
+                        <div class="result-layout">
+                            <!-- Left: Scan Image -->
+                            <div class="result-left">
+                                <div class="glass-card scan-card">
+                                    <div class="image-wrapper" style="position: relative; overflow: hidden; border-radius: var(--radius-lg); box-shadow: var(--shadow);">
+                                        <img src="https://images.unsplash.com/photo-1616012480717-fd9867059ca0?auto=format&fit=crop&q=80&w=800" alt="Medical Scan" class="medical-image" id="scan-image">
+                                        
+                                        <!-- AI VISUAL MARKING SYSTEM -->
+                                        <div class="ai-marking hidden" id="ai-marking">
+                                            <div class="ai-indicator">
+                                                <i data-lucide="arrow-down-right" class="red-arrow"></i>
+                                            </div>
+                                            <div class="ai-marker-tag">
+                                                <span id="ai-marker-text">AI detected pneumonia here</span>
+                                            </div>
+                                        </div>
+                                        <div class="ai-normal-marking hidden" id="ai-normal-marking">
+                                            <span>No abnormality detected</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Right: Diagnosis & Actions -->
+                            <div class="result-right">
+                                <div class="glass-card feedback-card" style="margin-bottom: 1.5rem;">
+                                    <div class="diag-header">
+                                        <div>
+                                            <h4 class="label" data-t="lblDiagnosis">Diagnosis</h4>
+                                            <h1 id="result-diag-title">Healthy (Normal)</h1>
+                                        </div>
+                                        <div class="conf-pill">
+                                            <span data-t="lblConfidence">Confidence</span>
+                                            <strong id="result-conf-val">96.8%</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="diag-body">
+                                        <div class="diag-section">
+                                            <h3 data-t="hClinicalSummary">AI Summary</h3>
+                                            <p id="result-summary-text">No focal consolidation, effusion, or pneumothorax detected. The cardiomediastinal silhouette is within normal limits. Bone structure appears intact.</p>
+                                            <button class="btn-outline patient-only" id="btn-listen-summary" onclick="speakSummary()" style="margin-top: 1rem; width: 100%; border-color: var(--primary); color: var(--primary); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i data-lucide="volume-2" style="width: 18px; height: 18px;"></i> <span>Listen to Summary</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="glass-card actions-panel">
+                                    <h3 data-t="hQuickActions">Quick Actions</h3>
+                                    
+                                    <div id="patient-actions" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                                        <button class="btn-primary full-width" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i data-lucide="download" style="width: 18px; height: 18px;"></i> Download Report PDF</button>
+                                        <button class="btn-outline full-width" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i data-lucide="share-2" style="width: 18px; height: 18px;"></i> Share with Doctor</button>
+                                    </div>
+                                    
+                                    <div id="doctor-actions" style="display: none; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                                        <button class="btn-primary full-width" onclick="document.getElementById('prescription-panel').classList.remove('hidden')" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i data-lucide="edit-3" style="width: 18px; height: 18px;"></i> Write Prescription</button>
+                                        <button class="btn-outline full-width" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i data-lucide="download" style="width: 18px; height: 18px;"></i> Download Report PDF</button>
+                                        <button class="btn-outline full-width" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i data-lucide="share-2" style="width: 18px; height: 18px;"></i> Share with Patient</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SETTINGS PAGE -->
+                    <section id="settings-page-view" class="page-view hidden">
+                        <h1 data-t="hSettings">Account Settings</h1>
+                        
+                        <div class="settings-grid">
+                            <div class="glass-card profile-settings">
+                                <h3 data-t="hProfileInfo">Profile Information</h3>
+                                <div class="settings-form">
+                                    <div class="form-group">
+                                        <label data-t="lblFullName">Full Name</label>
+                                        <input type="text" value="John Doe" id="sett-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-t="lblEmail">Email</label>
+                                        <input type="email" value="john@example.com" id="sett-email">
+                                    </div>
+                                    <button class="btn-primary" data-t="btnSave">Save Changes</button>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card pref-settings">
+                                <h3 data-t="hPreferences">Preferences</h3>
+                                <div class="form-group">
+                                    <label data-t="lblDisplayLanguage">Display Language</label>
+                                    <select onchange="changeLanguage(this.value)" id="settings-lang">
+                                        <option value="en">English (US)</option>
+                                        <option value="hi">Hindi (हिंदी)</option>
+                                        <option value="mr">Marathi (मराठी)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label data-t="lblTheme">Theme</label>
+                                    <select disabled>
+                                        <option>Light Theme (Default)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- NOTIFICATION PANEL -->
+        <div id="notif-panel" class="notif-panel hidden">
+            <div class="notif-header">
+                <h3 data-t="hNotifications">Notifications</h3>
+                <button onclick="toggleNotifications()" class="icon-btn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="notif-body" id="notif-list">
+                <div class="notif-section">
+                    <h4 class="notif-sec-title">🟢 Report Ready</h4>
+                    <div class="notif-item">
+                        <div class="notif-icon green"><i data-lucide="file-check"></i></div>
+                        <div class="notif-text">
+                            <p>Chest X-Ray Analysis Complete</p>
+                            <span>2 mins ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notif-section">
+                    <h4 class="notif-sec-title text-red">🔴 Emergency Alert</h4>
+                    <div class="notif-item">
+                        <div class="notif-icon red"><i data-lucide="alert-triangle"></i></div>
+                        <div class="notif-text">
+                            <p>Priority Case #942 requires review</p>
+                            <span>15 mins ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notif-section">
+                    <h4 class="notif-sec-title">📩 Doctor Notes</h4>
+                    <div class="notif-item">
+                        <div class="notif-icon blue"><i data-lucide="message-square"></i></div>
+                        <div class="notif-text">
+                            <p>Dr. Mitchell updated your care plan</p>
+                            <span>1 hour ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCTOR PRESCRIPTION PANEL (MODAL) -->
+        <div id="prescription-panel" class="modal hidden">
+            <div class="modal-content glass-card" style="max-width: 500px; width: 100%;">
+                <div class="modal-header" style="border-bottom: none; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 1.25rem; font-family: 'Inter', sans-serif;">Doctor Notes & Prescription</h3>
+                    <button onclick="closePrescription()" class="icon-btn" style="border: none; background: none; cursor: pointer; color: var(--text-sec);"><i data-lucide="x"></i></button>
+                </div>
+                <form onsubmit="savePrescription(event)">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label style="font-size: 0.9rem; font-weight: 500; color: var(--text-sec); display: block; margin-bottom: 0.5rem;">Notes</label>
+                        <textarea rows="4" placeholder="Clinical observations..." style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem; font-family: inherit; resize: vertical; outline: none;"></textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="font-size: 0.9rem; font-weight: 500; color: var(--text-sec); display: block; margin-bottom: 0.5rem;">Medicines</label>
+                        <input type="text" placeholder="Enter medicine details here..." style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem; font-family: inherit; outline: none;">
+                    </div>
+                    <div class="modal-footer" style="display: flex; justify-content: flex-end;">
+                        <button type="submit" class="btn-primary" style="width: auto;">Save & Notify Patient</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- FLOATING AI ASSISTANT -->
+        <div class="ai-trigger" id="ai-trigger" onclick="toggleAIChat()">
+            <div class="pulse-effect"></div>
+            <i data-lucide="sparkles"></i>
+        </div>
+
+        <!-- AI CHAT BOT MODAL -->
+        <div id="ai-chat-modal" class="ai-chat-bot hidden">
+            <div class="chat-header">
+                <div class="bot-info">
+                    <div class="bot-icon"><i data-lucide="sparkles"></i></div>
+                    <div>
+                        <h4 data-t="botName">Auralysis AI</h4>
+                        <p data-t="botActive">Always active</p>
+                    </div>
+                </div>
+                <button onclick="toggleAIChat()" class="icon-btn"><i data-lucide="x" style="color: white;"></i></button>
+            </div>
+            <div class="chat-body" id="chat-messages">
+                <div class="msg bot">Hello! I am your AI assistant. How can I help you with your reports today?</div>
+            </div>
+            <div class="chat-footer">
+                <button class="voice-btn" id="voice-btn" onclick="startVoiceInput()"><i data-lucide="mic"></i></button>
+                <input type="text" id="chat-query" placeholder="Ask a question..." onkeypress="handleChatEnter(event)">
+                <button class="send-btn" onclick="sendChatMessage()"><i data-lucide="send"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AUDIO FOR UI -->
+    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+
+    <script src="script.js"></script>
+    <script>
+        // Init Lucide Icons
+        window.onload = () => {
+            lucide.createIcons();
+            // Start on Auth page
+        }
+    </script>
+</body>
+</html>
