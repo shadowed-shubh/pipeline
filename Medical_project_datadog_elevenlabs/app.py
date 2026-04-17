@@ -12,7 +12,6 @@ import google.generativeai as genai
 # ----------------------------------------
 from dotenv import load_dotenv
 import google.generativeai as genai
-from elevenlabs import generate, set_api_key   # 🟢 legacy SDK - works on Railway
 from fastapi.middleware.cors import CORSMiddleware
 from routers import router as api_router
 
@@ -34,7 +33,6 @@ app.include_router(api_router)
 
 # API KEYS
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DATADOG_API_KEY = os.getenv("DATADOG_API_KEY")
 DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY")
@@ -153,29 +151,6 @@ def gemini_summary(report):
 # 🎙️ Voice (Dynamic) - Legacy Working Version
 # ----------------------------------------
 
-#elevenlabs_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
-#
-#def generate_voice(report):
-#    try:
-#        text = (
-#            f"{report['disease']} detected with confidence {report['confidence_score']}. "
-#            f"{report.get('patient_friendly_summary','')}"
-#        )
-#        audio = elevenlabs_client.text_to_speech.convert(
-#            text=text,
-#            voice_id="O4fpSSooe2oaOZTb0FE1",
-#            model_id="eleven_multilingual_v2",
-#            output_format="mp3_44100_128",
-#        )
-#        with open("doctor_report.mp3", "wb") as f:
-#            for chunk in audio:
-#                f.write(chunk)
-#        dd_metric("voice.success")
-#        return "doctor_report.mp3"
-#    except Exception as e:
-#        dd_metric("voice.error")
-#        print("🚨 ElevenLabs Error:", e)
-#        return None
 
 from gtts import gTTS
 
