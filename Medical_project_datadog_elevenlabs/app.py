@@ -40,8 +40,6 @@ DATADOG_API_KEY = os.getenv("DATADOG_API_KEY")
 DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY")
 DD_SITE = os.getenv("DD_SITE", "us5.datadoghq.com")
 
-# ElevenLabs Init (lazy — key may be None if .env is missing)
-DEFAULT_VOICE = "Rachel"  # 🎙 Default dependable ElevenLabs voice
 
 # Groq Client (lazy — instantiated on first use so missing key doesn't crash startup)
 _groq_client = None
@@ -154,7 +152,6 @@ def gemini_summary(report):
 # ----------------------------------------
 # 🎙️ Voice (Dynamic) - Legacy Working Version
 # ----------------------------------------
-from elevenlabs.client import ElevenLabs
 
 #elevenlabs_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
 #
