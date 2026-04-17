@@ -156,43 +156,24 @@ def gemini_summary(report):
 # 🎙️ Voice (Dynamic) - Legacy Working Version
 # ----------------------------------------
 def generate_voice(report):
-    if not ELEVENLABS_API_KEY:
-        print("⚠️ ElevenLabs disabled (missing ELEVENLABS_API_KEY)")
-        return None
     try:
-        # Lazy init — only set key if it's actually available
-        from elevenlabs import set_api_key, generate, voices
-        set_api_key(ELEVENLABS_API_KEY)
-
         text = (
             f"{report['disease']} detected with confidence {report['confidence_score']}. "
-            f"{report.get('patient_friendly_summary','')}"
+            f"{report.get('patient_friendly_summary', '')}"
         )
-
-        # Dynamically fetch available voices and use the first one to avoid "not found" errors
-        user_voices = voices()
-        if not user_voices:
-            raise Exception("No voices found in your ElevenLabs account!")
-        
-        fallback_voice = user_voices[0]
-
         audio = generate(
             text=text,
-            voice=fallback_voice,
+            voice="O4fpSSooe2oaOZTb0FE1",
             model="eleven_multilingual_v2"
         )
-
         with open("doctor_report.mp3", "wb") as f:
             f.write(audio)
-
         dd_metric("voice.success")
         return "doctor_report.mp3"
-
     except Exception as e:
         dd_metric("voice.error")
         print("🚨 ElevenLabs Error:", e)
         return None
-
 
 # ----------------------------------------
 # 🌍 Root Health Check

@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   // Use 10.0.2.2 for Android emulator, 127.0.0.1 for iOS/Web/Desktop.
   // Note: Adjust if testing on physical device.
-  static const String baseUrl = 'http://127.0.0.1:8000';
+  static const String baseUrl = 'https://pipeline-1-ch5e.onrender.com';
 
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();

@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _audioPlayer.onPlayerStateChanged.listen((state) {
       if (mounted) {
-        setState(() {
+        if (mounted) setState(() {
           _isPlaying = state == PlayerState.playing;
           if (state == PlayerState.completed) {
             _isPlaying = false;
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> uploadImage(File image) async {
-    setState(() {
+    if (mounted) setState(() {
       _isLoading = true;
     });
 
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
       var responseBody = await response.stream.bytesToString();
 
       if (response.statusCode == 200) {
-        setState(() {
+        if (mounted) setState(() {
           _resultData = jsonDecode(responseBody);
           _isLoading = false;
         });
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
         throw Exception("Server Error");
       }
     } catch (e) {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("❌ Analysis failed. Please check connection."),
