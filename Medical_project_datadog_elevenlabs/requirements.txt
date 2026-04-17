@@ -10,5 +10,5 @@ google-auth
 python-multipart==0.0.7
 setuptools
 sqlalchemy
+bcrypt==4.1.3
 PyJWT
-passlib[bcrypt]
