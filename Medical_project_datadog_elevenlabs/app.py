@@ -156,28 +156,45 @@ def gemini_summary(report):
 # ----------------------------------------
 from elevenlabs.client import ElevenLabs
 
-elevenlabs_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+#elevenlabs_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+#
+#def generate_voice(report):
+#    try:
+#        text = (
+#            f"{report['disease']} detected with confidence {report['confidence_score']}. "
+#            f"{report.get('patient_friendly_summary','')}"
+#        )
+#        audio = elevenlabs_client.text_to_speech.convert(
+#            text=text,
+#            voice_id="O4fpSSooe2oaOZTb0FE1",
+#            model_id="eleven_multilingual_v2",
+#            output_format="mp3_44100_128",
+#        )
+#        with open("doctor_report.mp3", "wb") as f:
+#            for chunk in audio:
+#                f.write(chunk)
+#        dd_metric("voice.success")
+#        return "doctor_report.mp3"
+#    except Exception as e:
+#        dd_metric("voice.error")
+#        print("🚨 ElevenLabs Error:", e)
+#        return None
+
+from gtts import gTTS
 
 def generate_voice(report):
     try:
         text = (
             f"{report['disease']} detected with confidence {report['confidence_score']}. "
-            f"{report.get('patient_friendly_summary','')}"
+            f"{report.get('patient_friendly_summary', '')}"
         )
-        audio = elevenlabs_client.text_to_speech.convert(
-            text=text,
-            voice_id="O4fpSSooe2oaOZTb0FE1",
-            model_id="eleven_multilingual_v2",
-            output_format="mp3_44100_128",
-        )
-        with open("doctor_report.mp3", "wb") as f:
-            for chunk in audio:
-                f.write(chunk)
+        tts = gTTS(text=text, lang='en')
+        tts.save("doctor_report.mp3")
         dd_metric("voice.success")
         return "doctor_report.mp3"
     except Exception as e:
         dd_metric("voice.error")
-        print("🚨 ElevenLabs Error:", e)
+        print("TTS Error:", e)
         return None
 # ----------------------------------------
 # 🌍 Root Health Check
