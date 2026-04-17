@@ -23,7 +23,7 @@ DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY")
 DD_SITE = os.getenv("DD_SITE", "us5.datadoghq.com")
 
 # ElevenLabs Init (lazy — key may be None if .env is missing)
-#ALICE_VOICE = "Alice"  # 🎙 confirmed voice name
+DEFAULT_VOICE = "Rachel"  # 🎙 Default dependable ElevenLabs voice
 
 # Groq Client (lazy — instantiated on first use so missing key doesn't crash startup)
 _groq_client = None
@@ -151,7 +151,7 @@ def generate_voice(report):
 
         audio = generate(
             text=text,
-            voice=ALICE_VOICE,
+            voice=DEFAULT_VOICE,
             model="eleven_multilingual_v2"
         )
 
