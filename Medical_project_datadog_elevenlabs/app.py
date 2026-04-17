@@ -6,7 +6,6 @@ import os, re, time
 from groq import Groq
 from dotenv import load_dotenv
 import google.generativeai as genai
-from elevenlabs import generate, set_api_key   # 🟢 legacy SDK - works on Railway
 
 # ----------------------------------------
 # Load Environment Variables
@@ -155,26 +154,31 @@ def gemini_summary(report):
 # ----------------------------------------
 # 🎙️ Voice (Dynamic) - Legacy Working Version
 # ----------------------------------------
+from elevenlabs.client import ElevenLabs
+
+elevenlabs_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+
 def generate_voice(report):
     try:
         text = (
             f"{report['disease']} detected with confidence {report['confidence_score']}. "
-            f"{report.get('patient_friendly_summary', '')}"
+            f"{report.get('patient_friendly_summary','')}"
         )
-        audio = generate(
+        audio = elevenlabs_client.text_to_speech.convert(
             text=text,
-            voice="O4fpSSooe2oaOZTb0FE1",
-            model="eleven_multilingual_v2"
+            voice_id="O4fpSSooe2oaOZTb0FE1",
+            model_id="eleven_multilingual_v2",
+            output_format="mp3_44100_128",
         )
         with open("doctor_report.mp3", "wb") as f:
-            f.write(audio)
+            for chunk in audio:
+                f.write(chunk)
         dd_metric("voice.success")
         return "doctor_report.mp3"
     except Exception as e:
         dd_metric("voice.error")
         print("🚨 ElevenLabs Error:", e)
         return None
-
 # ----------------------------------------
 # 🌍 Root Health Check
 # ----------------------------------------
