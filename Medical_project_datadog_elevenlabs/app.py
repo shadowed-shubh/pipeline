@@ -134,7 +134,7 @@ def gemini_summary(report):
 
 
 # ----------------------------------------
-# 🎙️ Voice (Alice) - Legacy Working Version
+# 🎙️ Voice (Dynamic) - Legacy Working Version
 # ----------------------------------------
 def generate_voice(report):
     if not ELEVENLABS_API_KEY:
@@ -142,6 +142,7 @@ def generate_voice(report):
         return None
     try:
         # Lazy init — only set key if it's actually available
+        from elevenlabs import set_api_key, generate, voices
         set_api_key(ELEVENLABS_API_KEY)
 
         text = (
@@ -149,9 +150,16 @@ def generate_voice(report):
             f"{report.get('patient_friendly_summary','')}"
         )
 
+        # Dynamically fetch available voices and use the first one to avoid "not found" errors
+        user_voices = voices()
+        if not user_voices:
+            raise Exception("No voices found in your ElevenLabs account!")
+        
+        fallback_voice = user_voices[0]
+
         audio = generate(
             text=text,
-            voice=DEFAULT_VOICE,
+            voice=fallback_voice,
             model="eleven_multilingual_v2"
         )
 
