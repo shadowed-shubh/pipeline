@@ -1,7 +1,9 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
-
-DATABASE_URL = "sqlite:///./auralysis.db"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -17,6 +19,7 @@ class User(Base):
     age = Column(String)
     blood_group = Column(String)
     history = relationship("ScanHistory", back_populates="user")
+    phone_number = Column(Integer, unique = True)
 
 class ScanHistory(Base):
     __tablename__ = "scan_history"
@@ -45,10 +48,10 @@ def seed_doctors():
     db = SessionLocal()
     if db.query(Doctor).count() == 0:
         doctors = [
-            Doctor(name="Dr. Sarah Jenkins", specialty="Pulmonologist", hospital="City General Hospital", phone="+1 555-0100", locality="Downtown"),
-            Doctor(name="Dr. Michael Chen", specialty="Neurologist", hospital="Mercy Medical Center", phone="+1 555-0101", locality="Westside"),
-            Doctor(name="Dr. Emily Patel", specialty="Radiologist", hospital="Valley Health Clinic", phone="+1 555-0102", locality="North Hills"),
-            Doctor(name="Dr. James Wilson", specialty="Oncologist", hospital="Hope Cancer Center", phone="+1 555-0103", locality="East End"),
+            Doctor(name="Dr. Sarah Jenkins", specialty="Pulmonologist", hospital="City General Hospital", phone="+91 555-0100", locality="Hadapsar,Pune"),
+            Doctor(name="Dr. Michael Chen", specialty="Neurologist", hospital="Mercy Medical Center", phone="+91 555-0101", locality="Navsayadri,Pune"),
+            Doctor(name="Dr. Emily Patel", specialty="Radiologist", hospital="Valley Health Clinic", phone="+91 555-0102", locality="North Hills,Mumbai"),
+            Doctor(name="Dr. James Wilson", specialty="Oncologist", hospital="Hope Cancer Center", phone="+91 555-0103", locality="East Andheri, Mumbai"),
         ]
         db.add_all(doctors)
         db.commit()
