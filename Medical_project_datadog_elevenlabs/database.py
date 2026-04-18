@@ -35,12 +35,14 @@ class ScanHistory(Base):
 
 class Doctor(Base):
     __tablename__ = "doctors"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    specialty = Column(String)
-    hospital = Column(String)
-    phone = Column(String)
-    locality = Column(String)
+    id            = Column(Integer, primary_key=True, index=True)
+    name          = Column(String, index=True)
+    specialty     = Column(String)
+    hospital      = Column(String)
+    phone         = Column(String)
+    locality      = Column(String)
+    email         = Column(String, unique=True, index=True, nullable=True)
+    password_hash = Column(String, nullable=True)
 
 Base.metadata.create_all(bind=engine)
 
