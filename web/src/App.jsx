@@ -60,6 +60,16 @@ function AppRouter() {
 }
 
 export default function App() {
+  // --- Security: Clear legacy mock sessions ---
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token && token.startsWith('mock-')) {
+      console.log('Legacy mock session detected. Clearing...')
+      localStorage.clear()
+      window.location.reload()
+    }
+  }, [])
+
   return (
     <HashRouter>
       <AuthProvider>

@@ -19,7 +19,8 @@ api.interceptors.response.use(
       localStorage.removeItem('token')
       localStorage.removeItem('role')
       localStorage.removeItem('user')
-      window.location.href = '/login'
+      // Redirect to login with hash for HashRouter
+      window.location.href = '/#/login'
     }
     return Promise.reject(err)
   }
