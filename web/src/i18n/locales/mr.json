@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "newScan":    "नवीन स्कॅन",
+    "history":    "इतिहास",
+    "findDoctors":"डॉक्टर शोधा",
+    "language":   "भाषा",
+    "logout":     "लॉगआउट",
+    "myPatients": "माझे रुग्ण",
+    "allReports": "सर्व अहवाल",
+    "myProfile":  "माझे प्रोफाइल",
+    "dashboard":  "डॅशबोर्ड"
+  },
+  "landing": {
+    "title":        "AURALYSIS",
+    "subtitle":     "AI-चालित वैद्यकीय प्रतिमा विश्लेषण",
+    "patientLogin": "रुग्ण लॉगिन",
+    "doctorLogin":  "डॉक्टर लॉगिन",
+    "patientSignup":"रुग्ण साइनअप",
+    "doctorSignup": "डॉक्टर साइनअप"
+  },
+  "auth": {
+    "signIn":     "साइन इन करा",
+    "signUp":     "खाते तयार करा",
+    "email":      "ईमेल पत्ता",
+    "password":   "पासवर्ड",
+    "name":       "पूर्ण नाव",
+    "age":        "वय",
+    "bloodGroup": "रक्तगट",
+    "specialty":  "विशेषज्ञता",
+    "hospital":   "रुग्णालयाचे नाव",
+    "phone":      "फोन नंबर",
+    "locality":   "स्थान / शहर",
+    "patient":    "रुग्ण",
+    "doctor":     "डॉक्टर",
+    "noAccount":  "खाते नाही?",
+    "haveAccount":"आधीच खाते आहे?",
+    "signUpLink": "साइन अप करा",
+    "signInLink": "साइन इन करा",
+    "processing": "प्रक्रिया सुरू आहे..."
+  },
+  "scan": {
+    "title":       "वैद्यकीय स्कॅन विश्लेषण",
+    "subtitle":    "त्वरित AI स्पष्टीकरणासाठी MRI, X-Ray किंवा CT Scan अपलोड करा",
+    "dropHint":    "येथे स्कॅन ड्रॉप करा",
+    "orClick":     "किंवा ब्राउझ करण्यासाठी क्लिक करा",
+    "supported":   "JPG, PNG, PDF समर्थित · कमाल 25MB",
+    "analyseBtn":  "विश्लेषण करा",
+    "analysing":   "AI ने प्रतिमा विश्लेषण...",
+    "generating":  "निदान अहवाल तयार होत आहे...",
+    "preparing":   "परिणाम तयार केले जात आहेत...",
+    "diagnosis":   "निदान",
+    "confidence":  "विश्वासार्हता",
+    "severity":    "तीव्रता",
+    "aiSummary":   "AI सारांश",
+    "fullReport":  "संपूर्ण वैद्यकीय अहवाल",
+    "symptoms":    "संभाव्य लक्षणे",
+    "nextSteps":   "शिफारस केलेले पुढील पाऊल",
+    "specialist":  "सल्ला घेण्यासाठी तज्ञ",
+    "emergency":   "आपत्कालीन चिन्हे",
+    "disclaimer":  "अस्वीकरण",
+    "playVoice":   "व्हॉइस रिपोर्ट ऐका",
+    "downloadPdf": "PDF डाउनलोड करा",
+    "saveHistory": "इतिहासात जतन करा",
+    "saved":       "✓ जतन झाले",
+    "newScan":     "नवीन स्कॅन सुरू करा"
+  },
+  "history": {
+    "title":     "स्कॅन इतिहास",
+    "subtitle":  "तुमचे AI-विश्लेषित वैद्यकीय स्कॅन",
+    "empty":     "अद्याप कोणताही स्कॅन नाही. तुमचे पहिले विश्लेषण सुरू करा.",
+    "viewReport":"संपूर्ण अहवाल पहा",
+    "download":  "PDF डाउनलोड करा"
+  },
+  "doctors": {
+    "title":    "डॉक्टर शोधा",
+    "subtitle": "जवळच्या तज्ञांशी संपर्क साधा",
+    "all":      "सर्व",
+    "call":     "कॉल",
+    "message":  "संदेश"
+  },
+  "chat": {
+    "title":       "Auralysis सहाय्यक",
+    "online":      "ऑनलाइन",
+    "placeholder": "तुमच्या अहवालाबद्दल विचारा...",
+    "greeting":    "नमस्कार! मी तुमचा Auralysis AI सहाय्यक आहे. तुमच्या वैद्यकीय अहवाल समजण्यात मी मदत करू शकतो."
+  },
+  "common": {
+    "loading":  "लोड होत आहे...",
+    "error":    "काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.",
+    "retry":    "पुन्हा प्रयत्न करा",
+    "close":    "बंद करा",
+    "welcome":  "स्वागत",
+    "or":       "किंवा"
+  }
+}

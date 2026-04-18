@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
+import 'report_detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -146,8 +147,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      // Implement showing full report if needed 
-                                      // Could pass the report_summary json to a details screen
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => ReportDetailScreen(
+                                            reportSummaryJson:
+                                                item['report_summary'] ?? '{}',
+                                            diseaseName:
+                                                item['disease']?.toString(),
+                                            confidence: item['confidence'] != null
+                                                ? (item['confidence'] as num)
+                                                    .toDouble()
+                                                : null,
+                                            date: item['date']?.toString(),
+                                          ),
+                                        ),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFF3D7BF5),

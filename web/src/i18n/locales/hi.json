@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "newScan":    "नई स्कैन",
+    "history":    "इतिहास",
+    "findDoctors":"डॉक्टर खोजें",
+    "language":   "भाषा",
+    "logout":     "लॉगआउट",
+    "myPatients": "मेरे मरीज",
+    "allReports": "सभी रिपोर्ट",
+    "myProfile":  "मेरी प्रोफाइल",
+    "dashboard":  "डैशबोर्ड"
+  },
+  "landing": {
+    "title":        "AURALYSIS",
+    "subtitle":     "AI-संचालित मेडिकल इमेज विश्लेषण",
+    "patientLogin": "मरीज लॉगिन",
+    "doctorLogin":  "डॉक्टर लॉगिन",
+    "patientSignup":"मरीज साइनअप",
+    "doctorSignup": "डॉक्टर साइनअप"
+  },
+  "auth": {
+    "signIn":     "साइन इन करें",
+    "signUp":     "खाता बनाएं",
+    "email":      "ईमेल पता",
+    "password":   "पासवर्ड",
+    "name":       "पूरा नाम",
+    "age":        "आयु",
+    "bloodGroup": "रक्त समूह",
+    "specialty":  "विशेषज्ञता",
+    "hospital":   "अस्पताल का नाम",
+    "phone":      "फोन नंबर",
+    "locality":   "स्थान / शहर",
+    "patient":    "मरीज",
+    "doctor":     "डॉक्टर",
+    "noAccount":  "खाता नहीं है?",
+    "haveAccount":"पहले से खाता है?",
+    "signUpLink": "साइन अप करें",
+    "signInLink": "साइन इन करें",
+    "processing": "प्रक्रिया हो रही है..."
+  },
+  "scan": {
+    "title":       "मेडिकल स्कैन विश्लेषण",
+    "subtitle":    "तत्काल AI व्याख्या के लिए अपनी MRI, X-Ray या CT Scan अपलोड करें",
+    "dropHint":    "यहाँ अपनी स्कैन ड्रॉप करें",
+    "orClick":     "या ब्राउज़ करने के लिए क्लिक करें",
+    "supported":   "JPG, PNG, PDF समर्थित · अधिकतम 25MB",
+    "analyseBtn":  "विश्लेषण करें",
+    "analysing":   "AI से छवि विश्लेषण...",
+    "generating":  "निदान रिपोर्ट तैयार हो रही है...",
+    "preparing":   "परिणाम तैयार किए जा रहे हैं...",
+    "diagnosis":   "निदान",
+    "confidence":  "विश्वसनीयता",
+    "severity":    "गंभीरता",
+    "aiSummary":   "AI सारांश",
+    "fullReport":  "पूर्ण मेडिकल रिपोर्ट",
+    "symptoms":    "संभावित लक्षण",
+    "nextSteps":   "अनुशंसित अगले कदम",
+    "specialist":  "परामर्श लेने के लिए विशेषज्ञ",
+    "emergency":   "आपातकालीन संकेत",
+    "disclaimer":  "अस्वीकरण",
+    "playVoice":   "वॉयस रिपोर्ट सुनें",
+    "downloadPdf": "PDF डाउनलोड करें",
+    "saveHistory": "इतिहास में सहेजें",
+    "saved":       "✓ सहेजा गया",
+    "newScan":     "नई स्कैन शुरू करें"
+  },
+  "history": {
+    "title":     "स्कैन इतिहास",
+    "subtitle":  "आपके AI-विश्लेषित मेडिकल स्कैन",
+    "empty":     "अभी तक कोई स्कैन नहीं। अपना पहला विश्लेषण शुरू करें।",
+    "viewReport":"पूर्ण रिपोर्ट देखें",
+    "download":  "PDF डाउनलोड करें"
+  },
+  "doctors": {
+    "title":    "डॉक्टर खोजें",
+    "subtitle": "आपके पास विशेषज्ञों से जुड़ें",
+    "all":      "सभी",
+    "call":     "कॉल",
+    "message":  "संदेश"
+  },
+  "chat": {
+    "title":       "Auralysis सहायक",
+    "online":      "ऑनलाइन",
+    "placeholder": "अपनी रिपोर्ट के बारे में पूछें...",
+    "greeting":    "नमस्ते! मैं आपका Auralysis AI सहायक हूं। मैं आपकी मेडिकल रिपोर्ट समझने में मदद कर सकता हूं।"
+  },
+  "common": {
+    "loading":  "लोड हो रहा है...",
+    "error":    "कुछ गलत हुआ। कृपया पुनः प्रयास करें।",
+    "retry":    "पुनः प्रयास",
+    "close":    "बंद करें",
+    "welcome":  "स्वागत है",
+    "or":       "या"
+  }
+}

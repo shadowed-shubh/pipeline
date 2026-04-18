@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,7 +16,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  File? _selectedImage;
+  /// All selected files (images + PDFs)
+  List<File> _selectedFiles = [];
   bool _isLoading = false;
   Map<String, dynamic>? _resultData;
 
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _audioPlayer.onPlayerStateChanged.listen((state) {
       if (mounted) {
-        if (mounted) setState(() {
+        setState(() {
           _isPlaying = state == PlayerState.playing;
           if (state == PlayerState.completed) {
             _isPlaying = false;
@@ -45,41 +47,176 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> pickImage() async {
+  /// Pick one or more images from gallery
+  Future<void> _pickImages() async {
     final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
+    final images = await picker.pickMultiImage();
+    if (images.isNotEmpty) {
       _audioPlayer.stop();
       setState(() {
-        _selectedImage = File(image.path);
-        _resultData = null; // Clear previous results on new selection
+        _selectedFiles = images.map((x) => File(x.path)).toList();
+        _resultData = null;
       });
-      uploadImage(File(image.path));
+      await _uploadFiles();
     }
   }
 
-  Future<void> uploadImage(File image) async {
-    if (mounted) setState(() {
-      _isLoading = true;
-    });
+  /// Pick one or more PDFs (and images) via file picker
+  Future<void> _pickFiles() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png', 'bmp', 'webp'],
+    );
+    if (result != null && result.files.isNotEmpty) {
+      _audioPlayer.stop();
+      setState(() {
+        _selectedFiles =
+            result.paths.whereType<String>().map((p) => File(p)).toList();
+        _resultData = null;
+      });
+      await _uploadFiles();
+    }
+  }
+
+  /// Show bottom sheet to choose pick method
+  Future<void> _showPickerOptions() async {
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1C1C1C),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const Text(
+                'SELECT FILES',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 20),
+              _pickOption(
+                icon: Icons.photo_library_rounded,
+                label: 'Multiple Images from Gallery',
+                subtitle: 'Select one or more medical images',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickImages();
+                },
+              ),
+              const SizedBox(height: 12),
+              _pickOption(
+                icon: Icons.attach_file_rounded,
+                label: 'PDF or Mixed Files',
+                subtitle: 'Pick PDF reports, images, or both',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickFiles();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _pickOption({
+    required IconData icon,
+    required String label,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF2A2A2A),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withOpacity(0.07)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF3D7BF5).withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: const Color(0xFF3D7BF5), size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14)),
+                  const SizedBox(height: 2),
+                  Text(subtitle,
+                      style: const TextStyle(
+                          color: Color(0xFF888888), fontSize: 12)),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded,
+                color: Color(0xFF888888), size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _uploadFiles() async {
+    if (_selectedFiles.isEmpty) return;
+
+    if (mounted) setState(() => _isLoading = true);
 
     try {
       var request = http.MultipartRequest(
-        "POST",
-        Uri.parse("https://pipeline-1-ch5e.onrender.com/diagnose"),
+        'POST',
+        Uri.parse('${ApiService.baseUrl}/diagnose'),
       );
-      request.files.add(await http.MultipartFile.fromPath("file", image.path));
+
+      for (final file in _selectedFiles) {
+        final ext = file.path.split('.').last.toLowerCase();
+        final field = ext == 'pdf' ? 'pdf' : 'file';
+        request.files.add(await http.MultipartFile.fromPath(field, file.path));
+      }
 
       var response = await request.send();
       var responseBody = await response.stream.bytesToString();
 
       if (response.statusCode == 200) {
-        if (mounted) setState(() {
-          _resultData = jsonDecode(responseBody);
-          _isLoading = false;
-        });
-        
+        if (mounted) {
+          setState(() {
+            _resultData = jsonDecode(responseBody);
+            _isLoading = false;
+          });
+        }
+
         // Log to history
         try {
           final token = await ApiService.getToken();
@@ -94,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                 'disease': _resultData!['prediction'],
                 'confidence': _resultData!['confidence'],
                 'report_summary': jsonEncode(_resultData!['medical_report']),
-                'voice_url': _resultData!['voice_report_url']
+                'voice_url': _resultData!['voice_report_url'],
               }),
             );
           }
@@ -102,16 +239,18 @@ class _HomePageState extends State<HomePage> {
           debugPrint('Failed to save history: $e');
         }
       } else {
-        throw Exception("Server Error");
+        throw Exception('Server Error: ${response.statusCode}');
       }
     } catch (e) {
       if (mounted) setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("❌ Analysis failed. Please check connection."),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('❌ Analysis failed. Please check connection.'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
     }
   }
 
@@ -134,12 +273,12 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: pickImage,
-        backgroundColor: Colors.blueAccent,
+        onPressed: _showPickerOptions,
+        backgroundColor: const Color(0xFF3D7BF5),
         elevation: 4,
-        icon: const Icon(Icons.add_a_photo_rounded, color: Colors.white),
+        icon: const Icon(Icons.add_rounded, color: Colors.white),
         label: const Text(
-          "NEW SCAN",
+          'NEW SCAN',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -166,56 +305,145 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHeroSection() {
+    if (_selectedFiles.isEmpty) {
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueAccent.withOpacity(0.05),
+              blurRadius: 20,
+              spreadRadius: 5,
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 60),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.biotech_rounded,
+                  size: 50,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text('Ready for Analysis', style: headerStyle),
+              const SizedBox(height: 8),
+              const Text(
+                'Upload images or PDF reports\nto start the automated diagnosis.',
+                style: bodyStyle,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Show selected files as a grid
+    final imageFiles = _selectedFiles
+        .where((f) => !f.path.toLowerCase().endsWith('.pdf'))
+        .toList();
+    final pdfFiles = _selectedFiles
+        .where((f) => f.path.toLowerCase().endsWith('.pdf'))
+        .toList();
+
     return Container(
       width: double.infinity,
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blueAccent.withOpacity(0.05),
-            blurRadius: 20,
-            spreadRadius: 5,
-          ),
-        ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
-        child: _selectedImage == null
-            ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 60),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.blueAccent.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.biotech_rounded,
-                        size: 50,
-                        color: Colors.blueAccent,
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // File count badge
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3D7BF5).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: const Color(0xFF3D7BF5).withOpacity(0.4)),
+                  ),
+                  child: Text(
+                    '${_selectedFiles.length} file${_selectedFiles.length != 1 ? 's' : ''} selected',
+                    style: const TextStyle(
+                      color: Color(0xFF3D7BF5),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
-                    const SizedBox(height: 20),
-                    const Text("Ready for Analysis", style: headerStyle),
-                    const SizedBox(height: 8),
-                    const Text(
-                      "Please upload an MRI image\nto start the automated diagnosis.",
-                      style: bodyStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                  ),
                 ),
-              )
-            : Image.file(
-                _selectedImage!,
-                height: 300,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              ],
+            ),
+          ),
+          // Image thumbnails grid
+          if (imageFiles.isNotEmpty)
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
               ),
+              itemCount: imageFiles.length,
+              itemBuilder: (_, i) => ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(imageFiles[i], fit: BoxFit.cover),
+              ),
+            ),
+          // PDF file chips
+          if (pdfFiles.isNotEmpty) ...
+            pdfFiles.map(
+              (f) => Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2A2A2A),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: const Color(0xFF3D7BF5).withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.picture_as_pdf_rounded,
+                          color: Color(0xFF3D7BF5), size: 20),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          f.path.split('/').last,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

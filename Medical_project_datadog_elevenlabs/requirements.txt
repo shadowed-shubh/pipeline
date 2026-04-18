@@ -14,3 +14,6 @@ bcrypt==4.1.3
 PyJWT
 gTTs
 
+passlib
+bcrypt
+psycopg2-binary
