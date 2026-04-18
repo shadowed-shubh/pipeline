@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Microscope, Loader2 } from 'lucide-react'
-import { registerPatient, registerDoctor } from '../api/mock'
+import { registerPatient, registerDoctor } from '../api/api'
 import { useToast } from '../context/ToastContext'
 
 export default function Register() {

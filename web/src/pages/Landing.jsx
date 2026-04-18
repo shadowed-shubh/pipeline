@@ -5,7 +5,7 @@ import { Microscope, User, Stethoscope } from 'lucide-react'
 import SplashScreen from '../components/SplashScreen'
 import LanguageSelector from '../components/LanguageSelector'
 import { useAuth } from '../context/AuthContext'
-import { ping } from '../api/mock'
+import { ping } from '../api/api'
 
 export default function Landing() {
   const { t } = useTranslation()

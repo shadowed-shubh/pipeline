@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Microscope, Loader2 } from 'lucide-react'
-import { loginPatient, loginDoctor } from '../api/mock'
+import { loginPatient, loginDoctor } from '../api/api'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 

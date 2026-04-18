@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Users, FileText, Activity, MapPin } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-import { getAllReports } from '../../api/mock'
+import { getAllReports } from '../../api/api'
 
 export default function DoctorDashboard() {
   const { t } = useTranslation()

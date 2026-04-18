@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getAllReports } from '../../api/mock'
+import { getAllReports } from '../../api/api'
 import { Users, FileText, Activity } from 'lucide-react'
 import ReportModal from '../../components/ReportModal'
 

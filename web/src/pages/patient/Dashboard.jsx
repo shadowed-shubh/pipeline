@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileText, CheckCircle, ShieldAlert, ChevronRight, Activity, Microscope } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-import { getHistory } from '../../api/mock'
+import { getHistory } from '../../api/api'
 import { useNavigate } from 'react-router-dom'
 import ReportModal from '../../components/ReportModal'
 

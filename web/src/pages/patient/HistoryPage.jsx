@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileText, Download, ChevronRight, Calendar, Search } from 'lucide-react'
-import { getHistory } from '../../api/mock'
+import { getHistory } from '../../api/api'
 import ReportModal from '../../components/ReportModal'
 import { generatePDF } from '../../utils/pdf'
 import { useAuth } from '../../context/AuthContext'

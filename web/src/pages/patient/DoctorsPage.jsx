@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MapPin, Phone, Building2, Stethoscope, MessageCircle, PhoneCall } from 'lucide-react'
-import { getDoctors } from '../../api/mock'
+import { getDoctors } from '../../api/api'
 
 const SPECIALTIES = ['All', 'Pulmonologist', 'Neurologist', 'Radiologist', 'Oncologist', 'Cardiologist', 'General Physician']
 

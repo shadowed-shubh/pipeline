@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CloudUpload, RefreshCcw, FileText, CheckCircle, Save, Download, Volume2, Loader2, ShieldAlert, ChevronDown } from 'lucide-react'
-import { diagnose, addHistory } from '../../api/mock'
+import { diagnose, addHistory } from '../../api/api'
 import { useToast } from '../../context/ToastContext'
 import { generatePDF } from '../../utils/pdf'
 import { useAuth } from '../../context/AuthContext'
