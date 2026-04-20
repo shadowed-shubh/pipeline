@@ -21,12 +21,6 @@ export default function Landing() {
     ping().catch(() => {})
   }, [])
 
-  useEffect(() => {
-    // If already logged in, redirect
-    if (isAuthenticated && !showSplash) {
-      navigate(role === 'doctor' ? '/doctor/dashboard' : '/user/dashboard', { replace: true })
-    }
-  }, [isAuthenticated, role, showSplash, navigate])
 
   const handleSplashDone = () => {
     sessionStorage.setItem('splashShown', 'true')
